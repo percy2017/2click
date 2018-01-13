@@ -6,8 +6,8 @@
 
 ## Programadores
 
-Ing. Percy Alvarez Cruz
-Full Stack Developer
+Ing. Percy Alvarez Cruz <br>
+Full Stack Developer <br>
 CIDENTI SA. - Bolivia 2018.
 
 ## Framework
