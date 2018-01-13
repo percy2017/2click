@@ -10,21 +10,21 @@ Ing. Percy Alvarez Cruz
 Full Stack Developer
 CIDENTI SA. - Bolivia 2018.
 
-##Framework
+## Framework
 	->Frontend
 		->Bootstrap 3.3
 
 	->Banckend
 		->Laravel 5.5
 
-##Apis
+## Apis
 	->Google maps
 	->Google reCAPTCHA
 	->Facebook Auth
 	->google Auth
 	->twitter Auth
 
-##Plugines
+## Plugines
 	->Confirm
 	->file-input
 	->select2
