@@ -4,7 +4,7 @@
 
 2Click en una aplicacion web responsive multiplataforma, construida para administrarar y gestionar la oferta, demanda y logistica, de un servicio a domicilio(delivery).
 
-## Programadores
+## Programador
 
 Ing. Percy Alvarez Cruz <br>
 Full Stack Developer <br>
