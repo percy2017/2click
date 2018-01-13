@@ -13,7 +13,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3>
-                            Notificaciones del sitema
+                            Notificaciones del Sistema
                             <div class="pull-right">
                                 <a href="#" data-toggle="modal" data-target="#modalNotificacionCreate" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Nuevo</a>
                                 <a href="{{URL::previous()}}" class="btn btn-danger btn-sm">

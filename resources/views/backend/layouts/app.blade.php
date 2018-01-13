@@ -9,17 +9,20 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name') }}</title>
-
+    <link rel="icon" href="{{ asset('imagenes/2click/logo.png') }}" type="image/x-icon">
     <!-- Styles -->
-    <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-    <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet">
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    <link rel="stylesheet" href="{{ asset('plugins/bootstrap/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/bootstrap/bootstrap-theme.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('font-awesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/toggle/css/bootstrap-toggle.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/confirm/jquery-confirm.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/file-input/fileinput.min.css') }}">
     
     @yield('mystyle')
-
+    <style>
+      body { padding-top: 70px; }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -29,13 +32,34 @@
     </div>
 
     <!-- Scripts -->
-    <!-- <script src="{{ asset('js/app.js') }}"></script> -->
-    <!-- <script src="{{ asset('js/backend.js') }}"></script> -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
-    
+    <script src="{{ asset('plugins/jquery/jquery-2.2.3.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('plugins/toggle/js/bootstrap-toggle.min.js') }}"></script>
+    <script src="{{ asset('plugins/confirm/jquery-confirm.min.js') }}"></script>
+    <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('plugins/file-input/fileinput.min.js') }}"></script>
+    <script>
+        function noti(urli)
+    {
+      // alert(urli);
+      $.ajax({
+        url: urli,
+        type: 'GET',
+      })
+      .done(function() {
+
+        // console.log("success");
+      })
+      .fail(function() {
+        // console.log("error");
+      })
+      .always(function() {
+        // console.log("complete");
+      });
+      
+    }
+    </script>
     @yield('myscript')
+    
 </body>
 </html>

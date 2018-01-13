@@ -38,7 +38,9 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Rol::all();
+        // $permisos = Permiso::all();
         $notificaciones = $this->notificaciones;
+        // return $permisos;
         return view('backend.roles.index',compact('roles','notificaciones'));
     }
 
@@ -61,9 +63,10 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         Rol::create([
-            'nombre' => $request->nombre
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion
         ]);
-        return back();
+        return redirect('admin/roles');
     }
 
     /**
@@ -85,7 +88,9 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $rol = Rol::where('id',$id)->first();
+
+        return $rol;
     }
 
     /**
@@ -97,7 +102,12 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // return $request;
+        $rol = Rol::where('id',$request->id)->first();
+        $rol->nombre = $request->nombre;
+        $rol->descripcion = $request->descripcion;
+        $rol->save();
+        return redirect('admin/roles');
     }
 
     /**

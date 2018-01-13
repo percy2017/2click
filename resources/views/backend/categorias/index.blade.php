@@ -6,6 +6,7 @@
 </div>
 <div id="cargado" style="display:none;">
     @include('backend.categorias.create')
+    @include('backend.categorias.edit')
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
@@ -13,10 +14,10 @@
                     <div class="panel-heading">
                         
                         <h4>
-                            <span class="glyphicon glyphicon-th"></span>
+                            <span class="fa fa-th"></span>
                               Categoria
                             <div class="pull-right">
-                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal_categoria_create"><i class="fa fa-plus"></i> Nuevo</button>
+                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal_create"><i class="fa fa-plus"></i> Nuevo</button>
                                 <a href="{{ URL::previous() }}" class="btn btn-danger btn-sm"><i class="fa fa-reply"></i> Atras</a>
                             </div>
                         </h4>
@@ -44,8 +45,7 @@
                                         <td>{{ \Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</td>
                                         
                                         <td class="text-center">
-                                            <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> Ver</a>
-                                            <a href="#" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i>Editar</a>
+                                            <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modal_edit" onclick="editar('{{ route('categorias.edit',$item->id) }}')"><i class="fa fa-edit"></i>Editar</button>
                                         </td> 
                                     </tr> 
                                     @endforeach
@@ -70,5 +70,28 @@
         document.getElementById('cargando').style.display = 'none';
         document.getElementById('cargado').style.display = 'block';
     });
+    function editar(urli)
+    {   
+        // alert(urli);
+        $.ajax({
+            url: urli,
+            type: 'GET',
+            dataType: 'json',
+        })
+        .done(function(result) {
+            document.getElementById('id').value = result.id;
+            document.getElementById('nombre').value = result.nombre;
+            document.getElementById('descripcion').value = result.descripcion;
+            // console.log(result);
+        })
+        .fail(function(result) {
+            // console.log("error"+result);
+        })
+        .always(function() {
+            // console.log("complete");
+        });
+        
+    
+    }
 </script>
 @endsection

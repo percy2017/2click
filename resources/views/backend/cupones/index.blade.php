@@ -93,7 +93,7 @@
             dataType: 'json',
         })
         .done(function(result) {
-
+            document.getElementById('id').value = result.id;
             document.getElementById('codigo').value = result.codigo;
             document.getElementById('nombre').value = result.nombre;
             document.getElementById('descripcion').value = result.descripcion;

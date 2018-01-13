@@ -3,9 +3,9 @@
 @section('content')
 <div id="cargando" class="text-center">
     <img src="{{ asset('imagenes/espera.gif') }}" alt="" style="width: 200px; height: 200px;">
+    <p>{{ config('app.mensaje_cargando') }}</p>
 </div>
 <div id="cargado" style="display:none;">
-
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
@@ -13,6 +13,7 @@
                     <div class="panel-heading">
                         
                         <h3>
+                            <i class="fa fa-gears"></i>
                             Proveedores del Sistemas
                             <div class="pull-right">
                                 <a href="{{ URL::previous() }}" class="btn btn-danger btn-sm"><i class="fa fa-reply"></i> Atras</a>
@@ -34,8 +35,8 @@
                                         <th>Nombre</th>
                                         <th>Direccion</th>
                                         <th>Whatsapp</th>  
-                                        <th>Habilitado</th>
-                                        <th>Creado</th>
+                                        <th>Abierto</th>
+                                        <th>Actualizado</th>
                                         <th>Acciones</th> 
                                     </tr> 
                                 </thead>
@@ -64,7 +65,7 @@
                                                 <input type="checkbox" data-size="mini" data-toggle="toggle" data-on="SI" disabled>
                                             @endif
                                         </td>
-                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</td>
                                         
                                         <td class="text-center">
                                             <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> Ver</a>
@@ -95,59 +96,69 @@
     });
     function comision_editar(urli)
     {
-        $.alert({
+
+    $.confirm({
+        escapeKey: 'cancel',
         title: 'Actualizar Comision',
         content: '' +
-                '<form action="" class="formName">' +
-                '<div class="form-group">' +
-                '<label>Comision ?</label>' +
-                '<input id="comision" type="number" class="form-control" value="4" required />' +
-                '</div>' +
-                '</form>',
-        icon: 'fa fa-opencart',
-        animation: 'scale',
-        closeAnimation: 'scale',
-        closeIcon: true,
-        draggable: true,
+            '<form action="" class="formName">' +
+            '<div class="form-group">' +
+            '<label>Comision ?</label>' +
+            '<input id="comision" type="number" class="form-control" value="4" required />' +
+            '</div>' +
+            '</form>',
         buttons: {
-            'confirm': {
-                    text: '<i class="fa fa-check"></i> OK',
-                    btnClass: 'btn-primary',
-                    action: function () 
-                    {
-                        var comision = document.getElementById('comision').value;
-                        urli = urli.replace(':comision', comision);
-                        
-                         $.ajax({
-                            method: 'get',
-                            url: urli,
-                            success: function(result)
-                            {
-                                
-                                location.reload();
-                            },
-                            error: function(){
-                               
-                                $.alert({
-                                      title: 'Error.!',
-                                      content: 'Ups. Algo salio mal en tu carrito.',
-                                      icon: 'fa fa-info',
-                                      animation: 'scale',
-                                      type: 'red',
-                                      closeAnimation: 'scale',
-                                      buttons: {
-                                          okay: {
-                                              text: 'OK',
-                                              btnClass: 'btnClass-blue'
-                                          }
+            formSubmit: {
+                text: 'Ok',
+                btnClass: 'btn-blue',
+                action: function () 
+                {
+                    var comision = document.getElementById('comision').value;
+                    urli = urli.replace(':comision', comision);
+                    
+                     $.ajax({
+                        method: 'get',
+                        url: urli,
+                        success: function(result)
+                        {
+                            location.reload();
+                        },
+                        error: function(){
+                           
+                            $.alert({
+                                  title: 'Error.!',
+                                  content: 'Ups. Algo.',
+                                  icon: 'fa fa-info',
+                                  animation: 'scale',
+                                  type: 'red',
+                                  closeAnimation: 'scale',
+                                  buttons: {
+                                      okay: {
+                                          text: 'OK',
+                                          btnClass: 'btnClass-blue'
                                       }
-                                  });
-                            },
+                                  }
+                              });
+                        },
 
-                        });
-                    }
+                    });    
+                     
                 }
-        }
+            },
+            cancel: function () 
+            {
+                //close
+            },
+        },
+        onContentReady: function () {
+        // bind to events
+        var jc = this;
+        this.$content.find('form').on('submit', function (e) {
+            // if the user submits the form by pressing enter in the field.
+            e.preventDefault();
+            jc.$$formSubmit.trigger('click'); // reference the button and click it
+        });
+    }
     });
 }
 </script>

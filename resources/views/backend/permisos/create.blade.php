@@ -11,12 +11,22 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-              <label>Nombre Completo</label>
-              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+              <label>Nombre</label>
+              <input type="text" list="browsers" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+              <datalist id="browsers">
+                @foreach($permisos_all as $item)
+                  <option value="{{ $item->nombre }}">
+                @endforeach
+              </datalist>
           </div>
           <div class="form-group">
               <label>Ruta</label>
-              <input type="text" class="form-control" id="ruta" name="ruta" placeholder="Ruta" required>
+              <input type="text" list="browsers2" class="form-control" id="ruta" name="ruta" placeholder="Ruta" required>
+              <datalist id="browsers2">
+                @foreach($permisos_all as $item)
+                  <option value="{{ $item->ruta }}">
+                @endforeach
+              </datalist>
           </div>
         </div>
         <div class="modal-footer">

@@ -87,7 +87,8 @@ class CategoriaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categoria = Categoria::where('id',$id)->first();
+        return $categoria;
     }
 
     /**
@@ -99,7 +100,13 @@ class CategoriaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // return $request;
+        $categoria = Categoria::where('id',$request->id)->first();
+        $categoria->nombre = $request->nombre;
+        $categoria->descripcion = $request->descripcion;
+        $categoria->save();
+
+        return back();
     }
 
     /**

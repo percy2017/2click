@@ -16,21 +16,24 @@ class CarritoController extends Controller
     public function ver()
     {
         $carrito= \Session::get('carrito');
-        $cantProveedores = $this->cantProveedores();
-        $cantProductos = $this->cantProductos();
-        $subTotal = $this->subTotal();
-        $total = $this->total();
-        if(Auth::check())
-        {   
-            $notificaciones = Notificacion::where('user_id', Auth::user()->id ? Auth::user()->id : 0 )->where('visto',0)->get();
-            return view('frontend.carrito',compact('carrito','notificaciones','cantProveedores','cantProductos','subTotal','total'));
+        if(count($carrito) > 0)
+        {
+            $cantProveedores = $this->cantProveedores();
+            $cantProductos = $this->cantProductos();
+            $subTotal = $this->subTotal();
+            $total = $this->total();
+            if(Auth::check())
+            {   
+                $notificaciones = Notificacion::where('user_id', Auth::user()->id ? Auth::user()->id : 0 )->where('visto',0)->orderBy('created_at','desc')->get();
+                return view('frontend.carrito',compact('carrito','notificaciones','cantProveedores','cantProductos','subTotal','total'));
+            }else
+            {
+                return view('frontend.carrito',compact('carrito','cantProveedores','cantProductos','subTotal','total'));
+            }
         }else
         {
-            return view('frontend.carrito',compact('carrito','cantProveedores','cantProductos','subTotal','total'));
+            return redirect('/')->with('mensaje_info','Tu carrito esta vacio.');
         }
-    	
-
-    	
     }
     public function agregar($id, $cant)
     {

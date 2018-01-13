@@ -5,56 +5,41 @@
 @section('content')
 <div id="cargando" class="text-center">
     <img src="{{ asset('imagenes/espera.gif') }}" alt="" style="width: 200px; height: 200px;">
+    <p>{{ config('app.mensaje_cargando') }}</p>
 </div>
 <div id="cargado" style="display:none;">
     <div class="container">
+        
+        @if(\Session::has('mensaje_info'))
+            <div class="alert alert-info alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <strong>Info!</strong> {{ \Session::get('mensaje_info') }}
+            </div>
+        @endif
         <div class="row">
             <div class="col-xs-12 col-md-9 col-sm-9">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4>
-                            Productos
-                            <div class="pull-right">
-                                <a href="{{ route('carrito.ver') }}" class="btn btn-default"><div id="label-carrito-cant2"></div></a>
-                                <button class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>Buscar</button>
+   
+                            <div class="input-group">
+                              <input type="text" id="criterio" class="form-control" placeholder="Busca tu producto..">
+                              <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" onclick="productos_buscar('{{ route('productos_buscar',':criterio') }}')"><i class="fa fa-search"></i></button>
                                 
+                                <a href="{{ route('carrito.ver') }}" class="btn btn-default" type="button"><i class="fa fa-shopping-cart"></i><span class="badge"><div id="label-carrito-cant2"></div></span></a>
+                                <button class="btn btn-primary" type="button" onclick="productos_index()"><i class="fa fa-home"></i></button>
+                              </span>
                             </div>
-                        </h4>
                     </div>
 
                     <div class="panel-body">
-                       
-                        @foreach($productos as $item)
-                            <!-- <div class="row"> -->
-                            <div class="col-sm-6 col-md-4 col-xs-12">
-                                <div class="thumbnail">
-                                    
-                                    <img src="{{ asset('imagenes/productos/'.$item->imagen) }}" alt="{{$item->nombre}}" style="height: 150px; width: 100%;">
-                                    <div class="caption">
-                                        <div>
-                                            <img src="{{ asset('imagenes/proveedores/'.$item->logo) }}" alt="{{$item->nombre_comercial}}" class="img-circle" style="height: 20px; width: 20px;">
-                                            {{$item->nombre_comercial}}
-                                        </div>
-
-                                        <h4><strong>{{$item->nombre}}</strong> </h4>
-                                        <p>{{$item->descripcion}}</p> 
-                                        <hr>
-                                        <div>
-                                            <h3>
-                                                <strong>{{$item->precio}} Bs.</strong>
-                                                <div class="pull-right">
-                                                    <button onclick="add_carrito('{{route('carrito.agregar', array($item->id, ':cant')) }}','{{$item->cantidad}}')" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-shopping-cart"></span> Pedir</button>
-                                                </div>
-                                            </h3>
-                                            
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- </div> -->
-                        @endforeach
-                     
+                        <div id="cargando1" class="text-center">
+                            <img src="{{ asset('imagenes/espera.gif') }}" alt="" style="width: 200px; height: 200px;">
+                            <p>{{ config('app.mensaje_cargando') }}</p>
+                        </div>
+                        <div id="cargado1" style="display:none;">
+                            <div id="productos_index"></div>  
+                        </div>                        
                     </div>
                     <div class="panel-footer text-center">
                         {{ config('app.myfooter') }}
@@ -64,41 +49,62 @@
             <div class="col-xs-12 col-md-3 col-sm-3">
                 <div class="panel panel-default text-center">
                     <div class="panel-heading">
-                        <h4>
+                        <label>
                             Catalogo
-                        </h4>
+                        </label>
                     </div>
-
-                    <!-- <div class="panel-body">
-                       
-                        
-                    </div> -->
-                    <div class="list-group">
+                    <div class="panel-body"> 
+                        <ul class="text-left">
                             @foreach($catalogos as $item)
-                                <a href="{{ route('catalogo') }}" class="list-group-item">{{ $item->nombre }}</a>
-                            @endforeach
-
-                        </div>
-                    <div class="panel-footer text-center">
-                        <a href="#">Ver todos</a>
+                            <li>
+                                <a href="#" onclick="productos_catalogo('{{ route('productos_catalogo',$item->id) }}')">{{ $item->nombre }}</a>    
+                            </li>                                                    
+                        @endforeach 
+                        </ul>
+                                                      
                     </div>
+                   <!--  <div class="panel-footer text-center">
+                        <a href="#">Ver todos</a>
+                    </div> -->
                 </div>
-
+                
+                <div class="panel panel-default text-center">
+                    <div class="panel-heading">
+                        <label>
+                            Proveedores
+                        </label>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="text-left">
+                            @foreach($proveedores as $item)
+                            <li>
+                                <a href="#" onclick="productos_proveedor('{{ route('productos_proveedor',$item->id) }}')">{{ $item->nombre_comercial }}</a>
+                            </li>                            
+                        @endforeach
+                        </ul>
+                                                       
+                    </div>
+                    <!-- <div class="panel-footer text-center">
+                        <a href="#">Ver todos</a>
+                    </div> -->
+                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading text-center">
-                        <h4>
+                        <label>
                             Tienes Preguntas ?
-                        </h4>
+                        </label>
                     </div>
 
                     <div class="panel-body">
-                        <!-- <div class="mcwidget-embed" data-widget-id="912022"></div> -->
+                        <div class="mcwidget-embed" data-widget-id="912022"></div>
                         <div class="text-center"><a target=”_blank” href="https://api.whatsapp.com/send?phone=59171130523&text=Tengo una consulta" class="btn btn-success btn-md"> <i class="fa fa-whatsapp"></i> Chat en whatsapp</a></div>
                         
                     </div>
                     <div class="panel-footer text-center">
                         Linea directa con pedidos 2click.
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -111,106 +117,255 @@
     $(document).ready(function() 
     {
         document.getElementById('cargando').style.display = 'none';
-        document.getElementById('cargado').style.display = 'block';
-        
-        cant_carrito();
+        document.getElementById('cargado').style.display = 'block'; 
+        productos_index();
     });
-function cant_carrito()
-{
 
-    $.ajax({
-          method: 'get',
-          url: '{{route('carrito.cantidad')}}',
-          success: function(result)
-          {
-              // document.getElementById('label-carrito-cant').innerHTML = 'Carrito('+result+')';
-              // document.getElementById('label-carrito-cant2').innerHTML = 'Carrito('+result+')';
-              document.getElementById('label-carrito-cant').innerHTML = '<span class="glyphicon glyphicon-shopping-cart"></span>Carrito('+result+')';
-                document.getElementById('label-carrito-cant2').innerHTML = '<span class="glyphicon glyphicon-shopping-cart"></span>Carrito('+result+')';
-              console.log('cantidad de productos en el carrito: '+result);
+    function productos_proveedor(urli)
+    {
+        // alert(urli);
+        document.getElementById('cargando1').style.display = 'block';
+        document.getElementById('cargado1').style.display = 'none';
+        $.ajax({
+            url: urli,
+            type: 'GET',
+        })
+        .done(function(result) {
 
+            $('#productos_index').empty().html(result);
+            document.getElementById('cargando1').style.display = 'none';
+            document.getElementById('cargado1').style.display = 'block';
+            // console.log(result);
+        })
+        .fail(function() {
+            // console.log("error");
+        })
+        .always(function() {
+            // console.log("complete");
+        });
+    }
 
-          },
-           error: function(){                     
-              $.alert({
-                    title: 'Error.!',
-                    content: 'Ups. Algo salio mal en tu carrito.',
-                    icon: 'fa fa-info',
-                    animation: 'scale',
-                    type: 'red',
-                    closeAnimation: 'scale',
-                    buttons: {
-                        okay: {
-                            text: 'OK',
-                            btnClass: 'btnClass-blue'
-                        }
+    function productos_catalogo(urli)
+    {
+        // alert(urli);
+        document.getElementById('cargando1').style.display = 'block';
+        document.getElementById('cargado1').style.display = 'none';
+        $.ajax({
+            url: urli,
+            type: 'GET',
+        })
+        .done(function(result) {
+
+            $('#productos_index').empty().html(result);
+            document.getElementById('cargando1').style.display = 'none';
+            document.getElementById('cargado1').style.display = 'block';
+            // console.log(result);
+        })
+        .fail(function() {
+            // console.log("error");
+        })
+        .always(function() {
+            // console.log("complete");
+        });
+    }
+    function productos_index()
+    {
+        document.getElementById('criterio').value = "";
+        document.getElementById('cargando1').style.display = 'block';
+        document.getElementById('cargado1').style.display = 'none';
+        $.ajax({
+            url: '{{ route('productos_index') }}',
+            type: 'GET',
+        })
+        .done(function(result) {
+
+            $('#productos_index').empty().html(result);
+            document.getElementById('cargando1').style.display = 'none';
+            document.getElementById('cargado1').style.display = 'block';
+            // console.log(result);
+        })
+        .fail(function() {
+            // console.log("error");
+        })
+        .always(function() {
+            // console.log("complete");
+        });
+    }
+    function productos_buscar(urli)
+    {
+        
+        var criterio = document.getElementById('criterio').value;
+        if(criterio)
+        {
+            document.getElementById('cargando1').style.display = 'block';
+            document.getElementById('cargado1').style.display = 'none';
+            urli = urli.replace(':criterio', criterio);
+            // alert(urli);
+            $.ajax({
+                url: urli,
+                type: 'GET',
+            })
+            .done(function(result) {
+                $('#productos_index').empty().html(result);
+                document.getElementById('cargando1').style.display = 'none';
+                document.getElementById('cargado1').style.display = 'block';
+                // console.log(result);
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                // console.log("complete");
+            });
+        }else
+        {
+            $.alert({
+                title: 'Error',
+                content: 'Debe ingresar un criterio de busqueda.',
+                icon: 'fa fa-info',
+                animation: 'scale',
+                type: 'red',
+                closeAnimation: 'scale',
+                buttons: {
+                    okay: {
+                        text: 'OK',
+                        btnClass: 'btnClass-blue'
                     }
-                });
-          },
-      });
-}
-function add_carrito(urli, cantDisponible) 
-{
- $.alert({
-        title: 'Agregar',
-        content: '' +
-                '<form action="" class="formName">' +
-                '<div class="form-group">' +
-                '<label>Cantidad ?</label>' +
-                '<input id="cant" type="number" step="1" min="1"  max="'+cantDisponible+'" class="name form-control" value="1" required />' +
-                '<p>Cantidad disponible: '+cantDisponible+'</p>' +
-                '</div>' +
-                '</form>',
-        icon: 'fa fa-opencart',
-        animation: 'scale',
-        closeAnimation: 'scale',
-        closeIcon: true,
-        draggable: true,
-        buttons: {
-            'confirm': {
-                    text: '<i class="fa fa-check"></i> OK',
-                    btnClass: 'btn-primary',
+                }
+            });  
+        }
+        
+        
+    }
+
+    $(document).on('click', '.pagination li a', function(event) {
+        event.preventDefault();
+        /* Act on the event */
+        document.getElementById('cargando1').style.display = 'block';
+        document.getElementById('cargado1').style.display = 'none';
+        var url = $(this).attr("href");
+        $.ajax({
+            url: url,
+            type: 'GET'
+        })
+        .done(function(result) {
+            $('#productos_index').empty().html(result);
+            document.getElementById('cargando1').style.display = 'none';
+            document.getElementById('cargado1').style.display = 'block';
+            // console.log("success");
+        })
+        .fail(function() {
+            // console.log("error");
+        })
+        .always(function() {
+            // console.log("complete");
+        });
+        
+    });
+
+    function add_carrito(urli, cantDisponible) 
+    {
+        $.confirm({
+            escapeKey: 'cancel',
+            title: 'Agregar',
+            content: '' +
+                    '<form action="" class="formName">' +
+                    '<div class="form-group">' +
+                    '<label>Cantidad ?</label>' +
+                    '<input id="cant" type="number" step="1" min="1"  max="'+cantDisponible+'" class="name form-control" value="1" required pattern="{0,10}"/>' +
+                    '<label>Cantidad disponible: '+cantDisponible+'</label>' +
+                    '</div>' +
+                    '</form>',
+            buttons: {
+                formSubmit: {
+                    text: 'Ok',
+                    btnClass: 'btn-blue',
                     action: function () 
                     {
                         var cant = document.getElementById('cant').value;
-                        urli = urli.replace(':cant', cant);
-                        
-                         $.ajax({
-                            method: 'get',
-                            url: urli,
-                            success: function(result)
-                            {
-                                
-                                //document.getElementById('label-carrito-cant').innerHTML = 'Carrito('+ result + ')';
-                                // document.getElementById('label-carrito-cant2').innerHTML = 'Carrito('+ result + ')';
-                                console.log('cantidad de productos en el carrito: '+result);
-                                cant_carrito();
-                            },
-                            error: function(){
-                               
-                                $.alert({
-                                      title: 'Error.!',
-                                      content: 'Ups. Algo salio mal en tu carrito.',
-                                      icon: 'fa fa-info',
-                                      animation: 'scale',
-                                      type: 'red',
-                                      closeAnimation: 'scale',
-                                      buttons: {
-                                          okay: {
-                                              text: 'OK',
-                                              btnClass: 'btnClass-blue'
+                        // alert(cant+' - '+cantDisponible);
+                        if(parseInt(cant) > parseInt(cantDisponible))
+                        {
+                            $.alert({
+                                title: 'Cantidad Superada',
+                                content: 'Su pedido supero la cantidad disponible.',
+                                icon: 'fa fa-info',
+                                animation: 'scale',
+                                type: 'red',
+                                closeAnimation: 'scale',
+                                buttons: {
+                                    okay: {
+                                        text: 'OK',
+                                        btnClass: 'btnClass-blue'
+                                    }
+                                }
+                            });   
+                        }else
+                        {
+                            urli = urli.replace(':cant', cant);
+                            $.ajax({
+                                method: 'get',
+                                url: urli,
+                                success: function(result)
+                                {
+                                    // console.log('cantidad de productos en el carrito: '+result);
+                                    cant_carrito();
+                                },
+                                error: function(){
+                                   
+                                    $.alert({
+                                          title: 'Error.!',
+                                          content: 'Ups. Algo salio mal en tu carrito.',
+                                          icon: 'fa fa-info',
+                                          animation: 'scale',
+                                          type: 'red',
+                                          closeAnimation: 'scale',
+                                          buttons: {
+                                              okay: {
+                                                  text: 'OK',
+                                                  btnClass: 'btnClass-blue'
+                                              }
                                           }
-                                      }
-                                  });
-                            },
+                                      });
+                                },
 
-                        });
+                            }); 
+                        }
+                         
+                         
                     }
-                }
+                },
+                cancel: function () 
+                {
+                    //close
+                },
+            },
+            onContentReady: function () {
+            // bind to events
+            var jc = this;
+            this.$content.find('form').on('submit', function (e) {
+                // if the user submits the form by pressing enter in the field.
+                e.preventDefault();
+                jc.$$formSubmit.trigger('click'); // reference the button and click it
+            });
         }
-    });
-}
+        });
+    }
+    function mostrar_imagen(imagen, descripcion)
+    {
+        $.alert({
+            title:'',
+            content: '<img class="img-responsive" width=100% src="'+imagen+'"> <p>'+descripcion+'</p>',
+            escapeKey: 'close',
+            theme: 'supervan',
+            buttons: {
+                close: function()
+                {
 
+                }
+            }
+        });
+    }
 </script>
 @endsection
 

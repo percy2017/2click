@@ -5,6 +5,7 @@
 @section('content')
 <div id="cargando" class="text-center">
     <img src="{{ asset('imagenes/espera.gif') }}" alt="" style="width: 200px; height: 200px;">
+    <p>{{ config('app.mensaje_cargando') }}</p>
 </div>
 <div id="cargado" style="display:none;">
     <div class="container">
@@ -17,9 +18,9 @@
                     <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4>
-                                    <span class="glyphicon glyphicon-edit"></span> Editar Negocio
+                                    <span class="fa fa-edit"></span> Editar Negocio
                                     <div class="pull-right">
-                                        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Actualizar</button>
+                                        <button type="submit" class="btn btn-primary"><span class="fa fa-save"></span> Actualizar</button>
                                         <a href="{{ URL::previous() }}" class="btn btn-danger"><span class="fa fa-reply"></span> Cancelar</a>
                                     </div>
                                 </h4>
@@ -29,7 +30,7 @@
                                 <div class="col-md-7 col-sm-7 col-xs-12">
                                     <div class="form-group">
                                         <label>Tipo de Negocio</label>
-                                        <select name="tipo_id" class="form-control">
+                                        <select name="tipo_id" class="form-control myselector">
                                             @foreach($tipos as $item)
                                                 @if($item->id == $proveedor->tipo_id)
                                                     <option value="{{ $item->id }}" selected>{{ $item->nombre }}</option>
@@ -55,11 +56,16 @@
                                     <div class="form-group">
                                          <label>Logo</label>
                                         <input type="file" id="logo" name="logo">
-                                        <!-- <p class="help-block">Logo del Negocio</p> -->
+                                        <p class="help-block">
+                                            <a href="#" onclick="mostrar_imagen('{{asset('imagenes/proveedores/'.$proveedor->logo)}}')">
+                                                Logo del Negocio
+                                            </a>
+                                            
+                                        </p>
                                 
                                     </div>
                                     <div class="form-group">
-                                         <label>Habilitado</label>
+                                         <label>Abierto</label>
                                          <div class="checkbox">
                                             @if($proveedor->habilitado)
                                                 <input name="habilitado" type="checkbox" data-size="small" data-toggle="toggle" data-on="SI" data-off="NO" checked>
@@ -70,11 +76,10 @@
                                          </div>                                    
                                     </div>
                                 </div>
-                                <div class="col-md-5 col-sm-5 col-xs-12 text-center">
-                                    <!-- <label>Ubicacion Geografica</label> -->
-                                     
+                                <div class="col-md-5 col-sm-5 col-xs-12">
                                     <div id="cargando_map" class="text-center">
                                         <img src="{{ asset('imagenes/espera.gif') }}" alt="" style="width: 200px; height: 200px;">
+                                        <p>Opteniendo tu ubiacion y creando el mapa, espere por favor..</p>
                                     </div>
                                     <div id="cargado_map" class="text-center" style="display: none;">
                                         <label>Agarre y arrastre el marcador para mejorar su ubicacion!</label>
@@ -88,9 +93,11 @@
                                           </span>
                                         </div><!-- /input-group -->
                                         
-                                    </div>
-                                    
-                                    
+                                    </div>    
+                                    <div class="form-group">
+                                        <label for="">Horario de Atencion</label>
+                                        <textarea class="form-control" name="atencion"  rows="3">{{ $proveedor->atencion }}</textarea>
+                                    </div>                                                          
                                 </div>
                             </div>
                             <div class="panel-footer text-center">
@@ -107,15 +114,33 @@
 
 @endsection
 @section('myscript')
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuQDYx7yXuhVf7kAV_NMPvJP7y3R_gHws"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.api_google_maps') }}"></script>
 <script src="{{ asset('js/mapa.js') }}"></script>
 <script>
     $(document).ready(function() 
     {
-        mapear_edit({{ $proveedor->latitud }}, {{ $proveedor->longitud }});
         document.getElementById('cargando').style.display = 'none';
         document.getElementById('cargado').style.display = 'block';
+        $('.myselector').select2();
+        mapear_edit({{ $proveedor->latitud }}, {{ $proveedor->longitud }});
+        
     });
+    function mostrar_imagen(imagen)
+    {
+        // alert(imagen);
+        $.alert({
+            title:'',
+            content: '<img class="img-responsive" width=100% src="'+imagen+'">',
+            escapeKey: 'close',
+            theme: 'supervan',
+            buttons: {
+                close: function()
+                {
+
+                }
+            }
+        });
+    }
 </script>
 @endsection
 

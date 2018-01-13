@@ -28,6 +28,7 @@ class CreateProveedoresTable extends Migration
             $table->integer('tipo_id')->unsigned();
             $table->foreign('tipo_id')->references('id')->on('tipos');
             $table->double('precio')->default(0);
+            $table->text('atencion')->nullable();
             $table->timestamps();
         });
     }

@@ -12,7 +12,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4>
-                            <span class="glyphicon glyphicon-th"></span>
+                            <i class="fa fa-clock-o"></i>
                               Estados de Pedidos
                             <div class="pull-right">
                                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal_estado_create"><i class="fa fa-plus"></i> Nuevo</button>

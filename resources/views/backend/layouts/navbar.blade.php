@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-static-top">
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
 
@@ -11,8 +11,12 @@
             </button>
 
             <!-- Branding Image -->
+             <a class="navbar-brand" href="#">
+                    <img alt="2Click" class="img-responsive img-circle" style="width: 30px; height: 30px;" src="{{ asset('imagenes/2click/logo.jpg') }}">
+                </a>
             <a class="navbar-brand" href="{{ url('/admin') }}">
-                <span class="glyphicon glyphicon-globe"></span> {{ config('app.name') }}
+               
+                 {{ config('app.name') }}
             </a>
         </div>
 
@@ -20,7 +24,7 @@
             <!-- Left Side Of Navbar -->
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-cutlery"></span> Negocios <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-delicious"></i> Negocios <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route('proveedores.create') }}">Nuevo Negocio</a></li>
                         <li><a href="{{ route('proveedores.index') }}">Mis Negocios</a></li>
@@ -28,28 +32,31 @@
                         <li><a href="{{ route('productos.create') }}">Nuevo Producto</a></li>
                         <li><a href="{{ route('productos.index') }}">Mis Producto</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Ingresos</a></li>
+                        <li><a href="{{ route('solicitudes.index') }}">Sol. en Cola</a></li>
+                        <li><a href="{{ route('ingresos.index') }}">Ingresos</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-dashboard"></span> Logistica <span class="caret"></span></a>
+   <!--              <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-trucki"></i> Logistica <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Pedidos</a></li>
                         <li><a href="#">Monedero</a></li>
                         
                     </ul>
-                </li>
+                </li> -->
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-wrench"></span> Pedidos <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-shopping-cart"></i> Pedidos <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">En Cola</a></li>
-                        <li><a href="#">Mensajeros</a></li>
+                        <li><a href="{{ route('pedidos.encola') }}">En Cola</a></li>
+                        <li role="separator" class="divider"></li>
                         <li><a href="{{ route('pedidos.proveedores') }}">Proveedores</a></li>
+                        <li><a href="{{ route('mensajeros.index') }}">Mensajeros</a></li>
+                        <li><a href="{{ route('pedidos.items') }}">Items</a></li>
 
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-lock"></span> Administracion <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-briefcase"></i> Administracion <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{route('usuarios.index')}}">Usuarios</a></li>
                         <li><a href="{{route('notificaciones.index')}}">Notificaciones</a></li>
@@ -64,6 +71,7 @@
                         <li role="separator" class="divider"></li>
                         <li><a href="{{route('categorias.index')}}">Categorias</a></li>
                         <li><a href="{{route('tipos.index')}}">Tipos</a></li>
+                        <li><a href="{{route('vehiculos.index')}}">Vehiculos</a></li>
                         
                         
                         
@@ -76,40 +84,52 @@
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 <li class="dropdown" role="presentation">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-bell"></span> Notificaciones <span class="badge">{{count($notificaciones)}}</span><span class="caret"></span></a>
+                    <a onclick="noti('{{ route('notificacion.ver') }}')" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="badge">{{count($notificaciones)}}</span><i class="fa fa-bell"></i><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         @foreach($notificaciones as $item)
                             <li>
                                 <a href="{{$item->ruta}}">
-                                    {{$item->mensaje}}
-                                    <div class="pull-right"><small>{{ \Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</small></div>
+                                    {{$item->mensaje}}-{{$item->ruta}}
+                                    <div class="pull-right">
+                                        <small>{{ \Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</small>
+                                    </div>
                                 </a>
                                 
                             </li>
                         @endforeach
+                        <li>
+                            <a href="{{ route('notificacion.index') }}" class="text-center">
+                                Ver todos
+                                <div class="pull-right">
+                                    <small></small>
+                                </div>
+                            </a>
+                            
+                        </li>
                     </ul>
                 </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
-                            <span class="glyphicon glyphicon-user"></span> {{ Auth::user()->name }} <span class="caret"></span>
-                        </a>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
+                        <i class="fa fa-user"></i> {{ Auth::user()->name }} <span class="caret"></span>
+                    </a>
 
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ route('login') }}">Perfil</a></li>
-                            <li><a href="{{ url('/') }}"  target="_blank">Principal</a></li>
-                            <li>
-                                <a href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
-                                    Salir
-                                </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route('perfil') }}">Perfil</a></li>
+                        <li><a href="{{ url('/') }}"  target="_blank">Principal</a></li>
+                        <li>
+                            <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                         document.getElementById('logout-form').submit();">
+                                Salir
+                            </a>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+                        </li>
+                    </ul>
+
+                </li>
                
             </ul>
         </div>

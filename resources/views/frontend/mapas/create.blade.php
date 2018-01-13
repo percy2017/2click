@@ -7,12 +7,14 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title">
-            Nuevo Locacion
+            <i class="fa fa-map-marker"></i>
+            Nueva ubicacion para recibir tus pedidos
           </h4>
         </div>
         <div class="modal-body">
           <div id="cargando_map" class="text-center">
               <img src="{{ asset('imagenes/espera.gif') }}" alt="" style="width: 200px; height: 200px;">
+              <p>Esperando tu ubicacion..</p>
           </div>
           <div id="cargado_map" class="" style="display: none;">
             <div class="form-group">
@@ -25,7 +27,7 @@
             </div>
             <div class="form-group">
               <label for="">Direccion</label>
-              <input type="text" class="form-control" name="direccion">
+              <input type="text" class="form-control" name="direccion" placeholder="Escriba su direccion completa con numero de casa">
             </div>
 
             <label>Agarre y arrastre el marcador para mejorar su ubicacion!</label>
@@ -42,8 +44,9 @@
           
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Guardar</button>
+          <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-reply"></i> Cerrar</button>
+          
         </div>
       </form>
     </div>

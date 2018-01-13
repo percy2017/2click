@@ -12,11 +12,23 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-
-    'paginacion' => 6,
-    'mensaje_bienvenida' => ', bienvenido a Pedidos 2click un servicio a domicilio(Delivery)',
+    // use Illuminate\Support\Facades\Auth;
+    'paginacion' => 3,
+    'paginacion2' => 2,
+    'mensaje_bienvenida' => ', Bienvenido a pedidos 2click un servicio a domicilio(Delivery)',
     'myfooter' => 'Plataforma web, desarrollada por CIDENTI SA. - @2018',
     'min_comision' => 4,
+    'mensaje_cargando' => 'cargando interface, espere por favor...',
+    'api_google_maps' =>'AIzaSyBuQDYx7yXuhVf7kAV_NMPvJP7y3R_gHws',
+
+    //para roles
+    'rol_mensajero' => 'Mensajero',
+
+    //notificacones frontend
+    // 'Mensajero.asignar' => ', te asignaste el pedido #',
+
+    //pedidos
+    'tiempo_aprox_entrega' => '20min. Aprox.',
 
     /*
     |--------------------------------------------------------------------------

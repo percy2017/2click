@@ -17,6 +17,12 @@ class PermisoTableSeeder extends Seeder
             'rol_id' => 2,
             'created_at' => \Carbon\Carbon::now()
         ]);
+         DB::table('permisos')->insert([
+            'nombre' => 'Panel de control (Dashboard)',
+            'ruta' => 'admin',
+            'rol_id' => 3,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
         DB::table('permisos')->insert([
             'nombre' => 'Usuarios',
             'ruta' => 'admin/usuarios',
@@ -53,7 +59,12 @@ class PermisoTableSeeder extends Seeder
             'rol_id' => 2,
             'created_at' => \Carbon\Carbon::now()
         ]);
-
+        DB::table('permisos')->insert([
+            'nombre' => 'Proveedores',
+            'ruta' => 'admin/proveedores',
+            'rol_id' => 3,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
         DB::table('permisos')->insert([
             'nombre' => 'Categorias de Productos',
             'ruta' => 'admin/categorias',
@@ -100,6 +111,30 @@ class PermisoTableSeeder extends Seeder
             'nombre' => 'Pedidos',
             'ruta' => 'admin/pedidos',
             'rol_id' => 2,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        DB::table('permisos')->insert([
+            'nombre' => 'Mensajeros para los pedidos',
+            'ruta' => 'admin/mensajeros',
+            'rol_id' => 2,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        DB::table('permisos')->insert([
+            'nombre' => 'Vehiculos del sistemas',
+            'ruta' => 'admin/vehiculos',
+            'rol_id' => 2,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        DB::table('permisos')->insert([
+            'nombre' => 'Productos',
+            'ruta' => 'admin/productos',
+            'rol_id' => 2,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        DB::table('permisos')->insert([
+            'nombre' => 'Productos',
+            'ruta' => 'admin/productos',
+            'rol_id' => 3,
             'created_at' => \Carbon\Carbon::now()
         ]);
     }

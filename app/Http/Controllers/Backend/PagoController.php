@@ -49,7 +49,7 @@ class PagoController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -60,7 +60,11 @@ class PagoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Pago::create([
+            'nombre' => $request->nombre,
+            'descripcion' =>$request->descripcion
+        ]);
+        return redirect('admin/pagos');
     }
 
     /**

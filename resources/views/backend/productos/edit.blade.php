@@ -1,13 +1,10 @@
 @extends('backend.layouts.app')
-
 @section('mystyle')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
-<link href="{{ asset('plugins/file-input/fileinput.css') }}" rel="stylesheet">
 @endsection
 @section('content')
-
  <div id="cargando" class="text-center">
     <img src="{{ asset('imagenes/espera.gif') }}" alt="" style="width: 200px; height: 200px;">
+    <p>{{ config('app.mensaje_cargando') }}</p>
 </div>
 <div id="cargado" style="display:none;">
     <div class="container">
@@ -19,9 +16,9 @@
                 <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3>
-                                <span class="glyphicon glyphicon-edit"></span> Editar Producto
+                                <span class="fa fa-edit"></span> Editar Producto
                                 <div class="pull-right">
-                                    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Actualizar</button>
+                                    <button type="submit" class="btn btn-primary"><span class="fa fa-save"></span> Actualizar</button>
                                     <a href="{{ URL::previous() }}" class="btn btn-danger"><span class="fa fa-reply"></span> Cancelar</a>
                                 </div>
                             </h3>
@@ -46,8 +43,7 @@
                                     <label>Negocio</label>
                                         <select name="proveedor_id"class="form-control myselector">
                                             @foreach($negocios as $item)
-                                               
-                                                @if($producto->negocio_id == $item->id)
+                                                @if($producto->proveedor_id == $item->id)
                                                     <option value="{{$item->id}}" selected>{{$item->nombre_comercial}}</option>
                                                 @else
                                                     <option value="{{$item->id}}">{{$item->nombre_comercial}}</option>
@@ -105,25 +101,24 @@
 
 @endsection
 @section('myscript')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script>
     $(document).ready(function() 
     {
+        document.getElementById('cargando').style.display = 'none';
+        document.getElementById('cargado').style.display = 'block';
         $('.myselector').select2();
     });
-    document.getElementById('cargando').style.display = 'none';
-    document.getElementById('cargado').style.display = 'block';
+    
 </script>
-<script src="{{ asset('plugins/file-input/fileinput.js') }}"></script>
 <script>
     $("#file-1").fileinput({
-        uploadUrl: "#",
+        //uploadUrl: "#",
         showUpload: false,
-        showRemove: false,
+        //showRemove: false,
         // showDrag: false,
-        showBrowse: false,
-        browseOnZoneClick: true,
-        dropZoneTitle: 'Imagen para editar',
+        //showBrowse: false,
+        //browseOnZoneClick: true,
+        //dropZoneTitle: 'Imagen para editar',
         initialPreview: [
             '{{ asset('imagenes/productos/'.$producto->imagen) }}',
         ],

@@ -48,6 +48,36 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        // if($this->isHttpException($exception)){
+        //     switch ($exception->getStatusCode()) {
+        //         // PAGINA NO ENCONTRADA
+        //         case 400:
+        //             return response()->view('errors.400',[],400);
+        //         break;
+        //         case 401:
+        //             return response()->view('errors.401',[],401);
+        //         break;
+        //         case 403:
+        //             return response()->view('errors.403',[],403);
+        //         break;
+        //         case 404:
+        //             return response()->view('errors.404',[],404);
+        //         break;
+        //         case 408:
+        //             return response()->view('errors.408',[],408);
+        //         break;
+        //         // ERROR INTERNO DEL SERVIDOR
+        //         case 500:
+        //             return response()->view('errors.500',[],500);    
+        //         break;
+        //         case 504
+        //             return response()->view('errors.504',[],504);
+        //         break;
+        //         default:
+        //             return $this->renderHttpException($exception);
+        //         break;
+        //     }
+        // }
         return parent::render($request, $exception);
     }
 }

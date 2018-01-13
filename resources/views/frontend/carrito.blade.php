@@ -5,6 +5,7 @@
 @section('content')
 <div id="cargando" class="text-center">
     <img src="{{ asset('imagenes/espera.gif') }}" alt="" style="width: 200px; height: 200px;">
+    <p>{{ config('app.mensaje_cargando') }}</p>
 </div>
 <div id="cargado" style="display:none;">
     <div class="container">
@@ -13,10 +14,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4>
+                          <i class="fa fa-shopping-cart"></i>
                             Carrito
                             <div class="pull-right">
-                                <a href="{{ route('pedido.index') }}" class="btn btn-success"><i class="glyphicon glyphicon-bullhorn"></i> Pedir</a>
-                                <button class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Buscar</button>
+                                <a href="{{ route('pedido.index') }}" class="btn btn-success"><i class="fa fa-location-arrow"></i> Pedir</a>
+                                <button class="btn btn-primary"><span class="fa fa-search"></span> Buscar</button>
                                 <a href="{{ URL::previous() }}" class="btn btn-danger"><i class="fa fa-reply"></i> Atras</a>
                             </div>
                         </h4>
@@ -37,7 +39,8 @@
                                 </tr>
                                 @foreach($carrito as $item)
                                 <tr>
-                                  <td>{{$loop->iteration}}</td>
+                                  <!-- <td>{{$loop->iteration}}</td> -->
+                                  <td>{{$item->id}}</td>
                                   <td>
                                   <a href="#" onclick="mostrarImagen('{{asset('imagenes/productos/'.$item->imagen)}}', '{{$item->descripcion}}')" >
                                   <img src="{{asset('imagenes/productos/'.$item->imagen)}}" class="img-circle img-bordered-xs" style="height: 40px; width: 40px;" alt="{{$item->nombre}}">
@@ -46,16 +49,11 @@
                                   <td>{{$item->nombre}}</td>
                                   <td><code style="color: blue;"> <i class="fa fa-home"></i> {{$item->nombre_comercial}} </code></td>
                                   <td class="text-center">{{ number_format($item->precio,2) }}</td>
-                                  <td>
-                                  <div class="input-group input-group-xs">
-                                      <input type="number" step="1" name="" value="{{$item->cantidad}}" id="cant-{{$item->id}}" max="{{$item->cantDisponible}}" min="1" style="width: 3em;">
-                                      <div class="input-group-btn">
-                                        <button class="btn btn-xs btn-success" onclick="editar('{{route('carrito.editar', array($item->id, ':cant'))}}', {{$item->id}})"><i class=" fa fa-retweet"></i></button>
-                                      </div>
-                                      
-                                    </div>
-                                  </td>
-
+                                  <td class="text-center">                                                
+                                      <div class="input-group">
+                                        <input type="number" step="1" name="" value="{{$item->cantidad}}" id="cant-{{$item->id}}" max="{{$item->cantDisponible}}" min="1" style="width: 3em;">
+                                        <button class="btn btn-xs btn-success" onclick="edit_carrito('{{route('carrito.editar', array($item->id, ':cant'))}}', '{{ $item->id }}')"><i class=" fa fa-retweet"></i></button>
+                                      </div>                                      
                                   </td>
                                   <td class="text-center">{{ number_format($item->precio * $item->cantidad,2) }}</td>
                                   <!-- <td><a href="#" class="btn btn-danger btn-sm"><i class="fa fa-remove"></a></td> -->
@@ -102,41 +100,7 @@
     {
         document.getElementById('cargando').style.display = 'none';
         document.getElementById('cargado').style.display = 'block';
-        cant_carrito();
     });
-function cant_carrito()
-{
-
-    $.ajax({
-          method: 'get',
-          url: '{{route('carrito.cantidad')}}',
-          success: function(result)
-          {
-              // document.getElementById('label-carrito-cant').innerHTML = 'Carrito('+result+')';
-              // document.getElementById('label-carrito-cant2').innerHTML = 'Carrito('+result+')';
-              document.getElementById('label-carrito-cant').innerHTML = '<span class="glyphicon glyphicon-shopping-cart"></span>Carrito('+result+')';
-              console.log('cantidad de productos en el carrito: '+result);
-
-
-          },
-           error: function(){                     
-              $.alert({
-                    title: 'Error.!',
-                    content: 'Ups. Algo salio mal en tu carrito.',
-                    icon: 'fa fa-info',
-                    animation: 'scale',
-                    type: 'red',
-                    closeAnimation: 'scale',
-                    buttons: {
-                        okay: {
-                            text: 'OK',
-                            btnClass: 'btnClass-blue'
-                        }
-                    }
-                });
-          },
-      });
-}
 function eliminar(urli)
 { 
 
@@ -188,7 +152,6 @@ function eliminar(urli)
           },
       }
   });
-
 }
 function mostrarImagen(urli, descripcion)
 {
@@ -202,7 +165,39 @@ function mostrarImagen(urli, descripcion)
       theme: 'supervan',
   });
 }
-
+function edit_carrito(urli, id)
+{
+  // alert(urli);
+  var cant = document.getElementById('cant-'+id).value;
+  urli = urli.replace(':cant', cant);
+  // alert(urli);
+  $.ajax({
+    method: 'get',
+    url: urli,
+    success: function(result)
+    {
+      // alert('ok');
+      location.reload();
+    },
+    error: function()
+    {
+      $.alert({
+          title: 'Error.!',
+          content: 'Ups. Algo salio mal en tu carrito',
+          icon: 'fa fa-info',
+          animation: 'scale',
+          closeAnimation: 'scale',
+          type: 'red',
+          buttons: {
+              okay: {
+                  text: 'OK',
+                  btnClass: 'btn-red'
+              }
+          }
+      });
+    },
+  });
+}
 </script>
 @endsection
 

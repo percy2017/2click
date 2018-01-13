@@ -105,7 +105,16 @@ class CuponController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // return $request; 
+        $cupon = Cupon::where('id',$request->id)->first();
+
+        $cupon->codigo = $request->codigo;
+        $cupon->nombre = $request->nombre;
+        $cupon->descripcion = $request->descripcion;
+        $cupon->descuento = $request->descuento;
+        $cupon->habilitado = $request->habilitado ? 1 : 0;
+        $cupon->save();
+        return redirect('admin/cupones');
     }
 
     /**

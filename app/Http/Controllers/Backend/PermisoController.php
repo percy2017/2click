@@ -75,9 +75,10 @@ class PermisoController extends Controller
     public function show($id)
     {   
         $rol = Rol::where('id',$id)->first();
-        $permisos = Permiso::where('rol_id',$id)->paginate(config('paginacion'));
+        $permisos = Permiso::where('rol_id',$id)->paginate(config('app.paginacion'));
         $notificaciones = $this->notificaciones;
-        return view('backend.permisos.index', compact('rol','permisos','notificaciones'));
+        $permisos_all = Permiso::all();
+        return view('backend.permisos.index', compact('rol','permisos','notificaciones','permisos','permisos_all'));
     }
 
     /**

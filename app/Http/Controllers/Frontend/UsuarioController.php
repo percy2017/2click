@@ -12,29 +12,26 @@ use App\User;
 use App\Lugar;
 use App\Categoria;
 use App\Localidad;
+use App\Pedido;
+use App\Proveedor;
 class UsuarioController extends Controller
 {
 	function index()
 	{
-		$productos = DB::table('productos')
-					->join('proveedores','proveedores.id','=','productos.proveedor_id')
-					->join('categorias','categorias.id','=','productos.categoria_id')
-					->select('productos.id','productos.imagen','productos.nombre','productos.descripcion','productos.precio','productos.cantidad','proveedores.nombre_comercial','proveedores.logo')
-					->where([['proveedores.habilitado','=',1],['productos.habilitado','=',1],['proveedores.precio','>=',config('app.min_comision')]])
-					->orderBy('productos.updated_at','desc')
-					->get();
+		
+
 		$catalogos = Categoria::all();
+		$proveedores = Proveedor::all();
 		//return $productos;
 		if(Auth::check())
 	    {
-	    	
 	    	$notificaciones = Notificacion::where('user_id', Auth::user()->id)->where('visto',0)->orderBy('created_at','desc')->get();
 	    	//return $catalogos;
-	    	return view('frontend.index',compact('notificaciones','productos','catalogos'));
+	    	return view('frontend.index',compact('notificaciones','catalogos','proveedores'));
 	    }else
 	    {
 	    	// return 'hola';
-	    	return view('frontend.index',compact('productos','catalogos'));
+	    	return view('frontend.index',compact('catalogos','proveedores'));
 	    }
 	}
 	function create()
@@ -86,8 +83,19 @@ class UsuarioController extends Controller
 	function perfil()
 	{
 		$lugares = Lugar::where('user_id',Auth::user()->id)->get();
+		$referencias = Referencia::all();
+		$pedidos = DB::table('pedidos')
+					->join('lugares','lugares.id','=','pedidos.lugar_id')
+					->join('estados','estados.id','=','pedidos.estado_id')
+					->select('pedidos.id','pedidos.created_at','estados.nombre','pedidos.total','lugares.direccion')
+					->where('lugares.user_id','=',Auth::user()->id)
+					->orderBy('pedidos.created_at','desc')
+					->get();
 		$notificaciones = Notificacion::where('user_id', Auth::user()->id)->where('visto',0)->orderBy('created_at','desc')->get();
-	    return view('frontend.perfil',compact('notificaciones','lugares'));	
+
+		// return $pedidos;
+	    return view('frontend.perfil',compact('notificaciones','lugares','pedidos','referencias'));
+	    //return redirect()->back();
 	}
 	function catalogo(Request $request)
 	{
@@ -95,7 +103,8 @@ class UsuarioController extends Controller
 	}
 	function perfil_editar()
 	{
-		$localidades = Localidad::all(); 
+		$localidades = Localidad::where('id','<>','1')->get(); 
+		
 		$notificaciones = Notificacion::where('user_id', Auth::user()->id)->where('visto',0)->orderBy('created_at','desc')->get();
 		return view('frontend.perfil_edit',compact('localidades','notificaciones'));
 	}
@@ -114,7 +123,19 @@ class UsuarioController extends Controller
         }
 		$user->save();
 
-		return redirect('/perfil');
+		return redirect('/pedido');
+	}
+
+	function notificaciones()
+	{
+		$notificaciones_all = Notificacion::where('user_id', Auth::user()->id)->orderBy('created_at','desc')->paginate(config('app.paginacion'));
+		$notificaciones = Notificacion::where('user_id', Auth::user()->id)->where('visto',0)->orderBy('created_at','desc')->get();
+		return view('frontend.notificaciones',compact('notificaciones','notificaciones_all'));
+
 	}
     
+    function notificaciones_ver()
+    {
+    	$notificaciones = Notificacion::where([['user_id', Auth::user()->id],['visto','=',0]])->update(['visto' => 1]);;
+    }
 }

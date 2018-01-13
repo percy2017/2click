@@ -43,8 +43,9 @@ class ProveedorController extends Controller
         //return $proveedores;
         $proveedores = DB::table('proveedores')
                         ->join('tipos','tipos.id','=','proveedores.tipo_id')
-                        ->select('proveedores.id','proveedores.nombre_comercial','proveedores.logo','proveedores.direccion','proveedores.whatsapp','proveedores.habilitado','proveedores.created_at','tipos.nombre')
-                        ->orderBy('proveedores.created_at','desc')
+                        ->select('proveedores.id','proveedores.nombre_comercial','proveedores.logo','proveedores.direccion','proveedores.whatsapp','proveedores.habilitado','proveedores.created_at','tipos.nombre','proveedores.updated_at')
+                        ->where('proveedores.user_id','=',Auth::user()->id)
+                        ->orderBy('proveedores.updated_at','desc')
                         ->get();
         $notificaciones = $this->notificaciones;
         
@@ -71,17 +72,18 @@ class ProveedorController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
+        return $request;
         Proveedor::create([
             'nombre_comercial' => $request->nombre_comercial,
             'direccion' => $request->direccion,
             'whatsapp' => $request->whatsapp,
-            'latitud' => $request->latitud,
-            'longitud' => $request->longitud,
+            'latitud' => $request->latitud ? $request->latitud : 0,
+            'longitud' => $request->longitud ? $request->longitud : 0,
             'habilitado' => $request->habilitado ? 1 : 0,
             'logo' => $request->logo ? $request->logo->getClientOriginalName() : 'default.png',
             'user_id' => Auth::user()->id,
-            'tipo_id' => $request->tipo_id
+            'tipo_id' => $request->tipo_id,
+            'atencion'=> $request->atencion
         ]);
         
         if($request->logo)
@@ -90,11 +92,11 @@ class ProveedorController extends Controller
         }
 
        Notificacion::create([
-            'mensaje' => 'Felicidades creaste un negocio.!',
+            'mensaje' => Auth::user()->name.', felicidades creaste un negocio.!',
             'ruta' => '/admin/proveedores',
             'user_id' => Auth::user()->id
         ]);
-        return redirect()->route('proveedores.index');
+        return redirect('/admin/proveedores');
     }
 
     /**
@@ -133,6 +135,7 @@ class ProveedorController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // return $request;
         $proveedor = Proveedor::where('id',$id)->first();
         $proveedor->nombre_comercial = $request->nombre_comercial;
         $proveedor->direccion = $request->direccion;
@@ -141,6 +144,8 @@ class ProveedorController extends Controller
         $proveedor->longitud = $request->longitud;
         $proveedor->habilitado = $request->habilitado ? 1 : 0;
         $proveedor->tipo_id = $request->tipo_id;
+        $proveedor->atencion = $request->atencion;
+
         if($request->logo)
         {
             \Storage::disk('proveedores')->put($request->logo->getClientOriginalName(), \File::get($request->logo));
@@ -159,6 +164,20 @@ class ProveedorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
+    }
+    public function cerrar($id)
+    {
+        $proveedor = Proveedor::where('id',$id)->first();
+        $proveedor->habilitado = 0;
+        $proveedor->save();
+        // return $proveedor;
+    }
+    public function abrir($id)
+    {
+        $proveedor = Proveedor::where('id',$id)->first();
+        $proveedor->habilitado = 1;
+        $proveedor->save();
+        // return $proveedor;
     }
 }

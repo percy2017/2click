@@ -5,6 +5,7 @@
     <img src="{{ asset('imagenes/espera.gif') }}" alt="" style="width: 200px; height: 200px;">
 </div>
 <div id="cargado" style="display:none;">
+    @include('backend.pagos.create')
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
@@ -14,7 +15,7 @@
                             <span class="glyphicon glyphicon-th"></span>
                               Metodos de Pago
                             <div class="pull-right">
-                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal_categoria_create"><i class="fa fa-plus"></i> Nuevo</button>
+                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal_create"><i class="fa fa-plus"></i> Nuevo</button>
                                 <a href="{{ URL::previous() }}" class="btn btn-danger btn-sm"><i class="fa fa-reply"></i> Atras</a>
                             </div>
                         </h4>

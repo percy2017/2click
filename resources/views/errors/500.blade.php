@@ -2,10 +2,6 @@
 @section('mystyle')
 @endsection
 @section('content')
-<div id="cargando" class="text-center">
-    <img src="{{ asset('imagenes/espera.gif') }}" alt="" style="width: 200px; height: 200px;">
-</div>
-<div id="cargado" style="display:none;">
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
@@ -20,6 +16,9 @@
                     <h3>
                         Error 500
                     </h3>
+                    <h1>
+                        de error interno del servidor-  mierda
+                    </h1>
                     <p>Ups. Ocurrio un error, lamentamos las molestias. estamos trabajando para corregirlo, Gracias</p>
                     <a href="{{ URL::previous() }}"></a>
                     </div>
@@ -30,7 +29,6 @@
             </div>
         </div>
     </div>
-</div>
 @endsection
 @section('myscript')
 @endsection

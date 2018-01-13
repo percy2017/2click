@@ -2,7 +2,7 @@
 
 @section('mystyle')
 <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet">
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<!-- <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"> -->
 @endsection
 @section('content')
 <div id="cargando" class="text-center">
@@ -45,7 +45,7 @@
                                         
                                 <div class="pull-right">
                                     <button type="submit" class="btn btn-primary">
-                                        <span class="glyphicon glyphicon-heart-empty"></span> Entrar
+                                        <span class="fa fa-heart"></span> Entrar
                                     </button>
                                 </div> 
                             </div>
@@ -78,7 +78,7 @@
 </div>
 @endsection
 @section('myscript')
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<!-- <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script> -->
 <script>
     $(document).ready(function() 
     {

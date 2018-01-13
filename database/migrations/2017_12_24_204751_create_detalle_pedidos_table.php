@@ -19,14 +19,13 @@ class CreateDetallePedidosTable extends Migration
             $table->integer('producto_id')->unsigned();
             $table->foreign('producto_id')->references('id')->on('productos');
 
-            $table->integer('ingreso_id')->unsigned();
-            $table->foreign('ingreso_id')->references('id')->on('ingresos');
-
             $table->integer('pedido_id')->unsigned();
             $table->foreign('pedido_id')->references('id')->on('pedidos');
             
             $table->double('precio')->default(0);
             $table->integer('cantidad')->default(0);
+
+            $table->boolean('entregado')->default(0);
             $table->timestamps();
         });
     }

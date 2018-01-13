@@ -8,7 +8,8 @@ function initMap()
   {
     console.log('Esperando la posicion del GPS');
     // document.getElementById("espera_text").innerHTML = 'Esperando la posicion del GPS';
-    navigator.geolocation.getCurrentPosition(mapear,showError);
+    var geo_options = {enableHighAccuracy:true, maximumAge:30000, timeout:27000};
+    navigator.geolocation.getCurrentPosition(mapear,showError,geo_options);
     
   } 
   else 
@@ -29,7 +30,6 @@ function initMap()
       });
   }    
 }
-
 function mapear_con_error()
 {
     lat_x = -14.825832;
@@ -254,4 +254,9 @@ function mapear_edit(lat_x, lng_y)
     document.getElementById("cargando_map").style.display = 'none';
     document.getElementById("cargado_map").style.display = 'block';
     
+}
+
+function enrutar()
+{
+  alert('destino');
 }

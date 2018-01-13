@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use App\User;
 use App\Rol;
 use App\Permiso;
@@ -106,7 +107,16 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
-        //
+        // $user = User::where('id',$id)->first();
+        $user = DB::table('users')
+                    ->join('roles','roles.id','=','users.rol_id')
+                    ->join('localidades','localidades.id','=','users.localidad_id')
+                    ->select('users.id','roles.nombre as rol','localidades.nombre as localidad','users.name','users.email','users.password','users.habilitado')
+                    ->where('users.id','=',$id)
+                    ->first();
+        // $des = Crypt::decryptString(json_encode($user->password));
+        // return $des;
+        return json_encode($user);
     }
 
     /**
@@ -118,7 +128,17 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // return $request;
+        $user = User::where('id',$request->id)->first();
+        $user->rol_id = $request->rol_id;
+        $user->localidad_id = $request->localidad_id;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->habilitado = $request->habilitado ? 1 : 0;
+        $user->save();
+
+        return redirect('admin/usuarios');
     }
 
     /**
@@ -130,5 +150,12 @@ class UsuarioController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function login_admin($id)
+    {
+        $user = User::where('id','=',$id)->first();
+        Auth::login($user);
+        return redirect('/');
     }
 }

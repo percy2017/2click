@@ -2,9 +2,10 @@
 <div class="modal fade" id="modal_cupon_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form method="post" action="{{ route('cupones.store') }}">
+      <form method="post" action="{{ route('cupones.update',0) }}">
         {{ csrf_field() }}
         {{ method_field('PUT') }}
+        <input type="text" id="id" name="id" hidden>
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="myModalLabel">Editar Cupon</h4>

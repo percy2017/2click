@@ -2,6 +2,7 @@
 @section('content')
 <div id="cargando" class="text-center">
     <img src="{{ asset('imagenes/espera.gif') }}" alt="" style="width: 200px; height: 200px;">
+    <p>{{ config('app.mensaje_cargando') }}</p>
 </div>
 <div id="cargado" style="display:none;">
     <div class="container">
@@ -11,7 +12,7 @@
                     <div class="panel-heading">
                         
                         <h4>
-                            <span class="glyphicon glyphicon-cutlery"></span>
+                            <span class="fa fa-cutlery"></span>
                               Mis Negocios
                             <div class="pull-right">
                                 <a href="{{route('proveedores.create')}}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Nuevo</a>
@@ -32,8 +33,8 @@
                                         <th>Nombre Comercial</th>
                                         <th>Direccion</th>
                                         <th>Whatsapp</th>  
-                                        <th>Habilitado</th>                                     
-                                        <th>Creado</th>
+                                        <th>Abierto</th>                                     
+                                        <th>Actualizado</th>
                                         <th class="text-center">Acciones</th> 
                                     </tr> 
                                 </thead>
@@ -59,10 +60,20 @@
                                                 <input type="checkbox" data-size="mini" data-toggle="toggle" data-off="NO" disabled>
                                             @endif
                                         </td>
-                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</td>
                                         
                                         <td class="text-center">
                                             <a href="{{ route('proveedores.edit',$item->id) }}" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i>Editar</a>
+                                            @if($item->habilitado)
+                                                <button class="btn btn-danger btn-xs" onclick="cerrar('{{ route('proveedores.cerrar',$item->id) }}')">
+                                                <i class="fa fa-thumbs-o-down"></i> Cerrar
+                                            </button>
+                                            @else
+                                                <button class="btn btn-primary btn-xs" onclick="abrir('{{ route('proveedores.abrir',$item->id) }}')">
+                                                <i class="fa fa-thumbs-o-up"></i> Abrir
+                                            </button>
+                                            @endif
+                                            
                                         </td> 
                                     </tr> 
                                     @endforeach
@@ -100,7 +111,123 @@
 
                 }
             }
-    });
-}
+        });
+    }
+    function cerrar(urli)
+    {
+        // alert(urli);
+        $.confirm({
+            escapeKey: 'cancel',
+            title: 'Cerrar',
+            content: 'Estas seguro de cerrar tu negocio? <br> Con esta accion todo tus producto ya NO estaran disponible al publico.',
+            buttons: {
+                formSubmit: {
+                    text: 'SI',
+                    btnClass: 'btn-blue',
+                    action: function () 
+                    {     
+                        $.ajax({
+                            method: 'get',
+                            url: urli,
+                            success: function(result)
+                            {
+                                location.reload();
+                            },
+                            error: function(){
+                               
+                                $.alert({
+                                      title: 'Error.!',
+                                      content: 'Ups. Algo salio mal.',
+                                      icon: 'fa fa-info',
+                                      animation: 'scale',
+                                      type: 'red',
+                                      closeAnimation: 'scale',
+                                      buttons: {
+                                          okay: {
+                                              text: 'OK',
+                                              btnClass: 'btnClass-blue'
+                                          }
+                                      }
+                                  });
+                            },
+
+                        });  
+                         
+                    }
+                },
+                cancel: function () 
+                {
+                    //close
+                },
+            },
+            onContentReady: function () {
+            // bind to events
+            var jc = this;
+            this.$content.find('form').on('submit', function (e) {
+                // if the user submits the form by pressing enter in the field.
+                e.preventDefault();
+                jc.$$formSubmit.trigger('click'); // reference the button and click it
+            });
+        }
+        });
+    }
+    function abrir(urli)
+    {
+        // alert(urli);
+        $.confirm({
+            escapeKey: 'cancel',
+            title: 'Abrir',
+            content: 'Estas listo para ofrecer tus productos al publico?',
+            buttons: {
+                formSubmit: {
+                    text: 'SI',
+                    btnClass: 'btn-blue',
+                    action: function () 
+                    {     
+                        $.ajax({
+                            method: 'get',
+                            url: urli,
+                            success: function(result)
+                            {
+                                location.reload();
+                            },
+                            error: function(){
+                               
+                                $.alert({
+                                      title: 'Error.!',
+                                      content: 'Ups. Algo salio mal.',
+                                      icon: 'fa fa-info',
+                                      animation: 'scale',
+                                      type: 'red',
+                                      closeAnimation: 'scale',
+                                      buttons: {
+                                          okay: {
+                                              text: 'OK',
+                                              btnClass: 'btnClass-blue'
+                                          }
+                                      }
+                                  });
+                            },
+
+                        });  
+                         
+                    }
+                },
+                cancel: function () 
+                {
+                    //close
+                },
+            },
+            onContentReady: function () {
+            // bind to events
+            var jc = this;
+            this.$content.find('form').on('submit', function (e) {
+                // if the user submits the form by pressing enter in the field.
+                e.preventDefault();
+                jc.$$formSubmit.trigger('click'); // reference the button and click it
+            });
+        }
+        });
+    }
 </script>
 @endsection

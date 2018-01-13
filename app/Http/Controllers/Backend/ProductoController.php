@@ -26,7 +26,7 @@ class ProductoController extends Controller
         $this->middleware(function ($request, $next) 
         {
             $rol = Rol::where('id', Auth::user()->rol_id)->first();
-            $permisos = Permiso::where('rol_id',$rol->id)->where('ruta','admin/categorias')->first();
+            $permisos = Permiso::where('rol_id',$rol->id)->where('ruta','admin/productos')->first();
             if ($permisos) 
             {
                 $this->notificaciones = Notificacion::where('user_id', Auth::user()->id)->where('visto',0)->orderBy('created_at','desc')->get();
@@ -45,7 +45,8 @@ class ProductoController extends Controller
                         ->join('categorias', 'productos.categoria_id', '=', 'categorias.id')
                         ->join('proveedores', 'proveedores.id','=','productos.proveedor_id')
                         ->select('productos.id', 'productos.imagen', 'productos.nombre' ,'productos.descripcion', 'productos.cantidad', 'productos.precio' ,'productos.habilitado','productos.updated_at', 'categorias.nombre as categoria','proveedores.nombre_comercial')
-                        ->orderBy('productos.created_at', 'desc')
+                        ->orderBy('productos.updated_at', 'desc')
+                        ->where('proveedores.user_id', '=', Auth::user()->id)
                         ->paginate(config('app.paginacion'));
         $notificaciones = $this->notificaciones;
         return view('backend.productos.index',compact('productos', 'notificaciones'));
@@ -91,12 +92,12 @@ class ProductoController extends Controller
             \Storage::disk('productos')->put($request->imagen->getClientOriginalName(), \File::get($request->imagen));
         }
 
-        $notificacion = Notificacion::create([
-            'mensaje' => $producto->nombre.', Agregado a tu menu',
-            'ruta' => '/admin/productos',
-            'user_id' => Auth::user()->id
-        ]);
-        return redirect($notificacion->ruta);
+        // $notificacion = Notificacion::create([
+        //     'mensaje' => $producto->nombre.', Agregado a tu menu',
+        //     'ruta' => '/admin/productos',
+        //     'user_id' => Auth::user()->id
+        // ]);
+        return redirect('admin/productos')->with('mensaje_info', $producto->nombre.', creado correctamente.');
     }
 
     /**
